@@ -16,7 +16,7 @@ buildscript {
         // Aliucord gradle plugin which makes everything work and builds plugins
         classpath("com.aliucord:gradle:main-SNAPSHOT")
         // Kotlin support. Remove if you want to use Java
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.21")
+        //classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.21")
     }
 }
 
@@ -36,13 +36,13 @@ subprojects {
     apply(plugin = "com.android.library")
     apply(plugin = "com.aliucord.gradle")
     // Remove if using Java
-    apply(plugin = "kotlin-android")
+    //apply(plugin = "kotlin-android")
 
     // Fill out with your info
     aliucord {
-        author("DISCORD USERNAME", 123456789L)
-        updateUrl.set("https://raw.githubusercontent.com/USERNAME/REPONAME/builds/updater.json")
-        buildUrl.set("https://raw.githubusercontent.com/USERNAME/REPONAME/builds/%s.zip")
+        author("ConfiG", 9039L)
+        updateUrl.set("https://raw.githubusercontent.com/cgytrus/aliucord-plugins/builds/updater.json")
+        buildUrl.set("https://raw.githubusercontent.com/cgytrus/aliucord-plugins/builds/%s.zip")
     }
 
     android {
@@ -56,17 +56,6 @@ subprojects {
         compileOptions {
             sourceCompatibility = JavaVersion.VERSION_11
             targetCompatibility = JavaVersion.VERSION_11
-        }
-
-        tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-            kotlinOptions {
-                jvmTarget = "11" // Required
-                // Disables some unnecessary features
-                freeCompilerArgs = freeCompilerArgs +
-                        "-Xno-call-assertions" +
-                        "-Xno-param-assertions" +
-                        "-Xno-receiver-assertions"
-            }
         }
     }
 
