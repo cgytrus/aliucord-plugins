@@ -41,16 +41,18 @@ public class UwuifierPlugin extends Plugin {
 
     @Override
     public void start(Context context) throws Throwable {
-        Uwuifier.Settings.periodToExclamationChance =
-            settings.getFloat("periodToExclamationChance", Uwuifier.Settings.periodToExclamationChance);
-        Uwuifier.Settings.stutterChance =
-            settings.getFloat("stutterChance", Uwuifier.Settings.stutterChance);
-        Uwuifier.Settings.presuffixChance =
-            settings.getFloat("presuffixChance", Uwuifier.Settings.presuffixChance);
-        Uwuifier.Settings.suffixChance =
-            settings.getFloat("suffixChance", Uwuifier.Settings.suffixChance);
-        Uwuifier.Settings.duplicateCommasChance =
-            settings.getFloat("duplicateCommasChance", Uwuifier.Settings.duplicateCommasChance);
+        Uwuifier.getSettings().periodToExclamationChance =
+            settings.getFloat("periodToExclamationChance", Uwuifier.getSettings().periodToExclamationChance);
+        Uwuifier.getSettings().stutterChance =
+            settings.getFloat("stutterChance", Uwuifier.getSettings().stutterChance);
+        Uwuifier.getSettings().presuffixChance =
+            settings.getFloat("presuffixChance", Uwuifier.getSettings().presuffixChance);
+        Uwuifier.getSettings().suffixChance =
+            settings.getFloat("suffixChance", Uwuifier.getSettings().suffixChance);
+        Uwuifier.getSettings().duplicateCharactersChance =
+            settings.getFloat("duplicateCharactersChance", Uwuifier.getSettings().duplicateCharactersChance);
+        Uwuifier.getSettings().duplicateCharactersAmount =
+            settings.getInt("duplicateCharactersAmount", Uwuifier.getSettings().duplicateCharactersAmount);
 
         patcher.patch(ChatInputViewModel.class.getDeclaredMethod("sendMessage", Context.class,
             MessageManager.class, MessageContent.class, List.class, boolean.class,

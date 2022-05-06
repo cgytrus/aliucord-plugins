@@ -10,12 +10,22 @@ import kotlin.jvm.functions.Function3;
 
 public class Uwuifier {
     public static class Settings {
-        public static float periodToExclamationChance = 0.2f;
-        public static float stutterChance = 0.1f;
-        public static float presuffixChance = 0.1f;
-        public static float suffixChance = 0.2f;
-        public static float duplicateCommasChance = 0.4f;
-        public static int duplicateCommasAmount = 4;
+        public float periodToExclamationChance = 0.2f;
+        public float stutterChance = 0.1f;
+        public float presuffixChance = 0.1f;
+        public float suffixChance = 0.3f;
+        public float duplicateCharactersChance = 0.4f;
+        public int duplicateCharactersAmount = 3;
+    }
+
+    private static Settings _settings = new Settings();
+
+    public static Settings getSettings() {
+        return _settings;
+    }
+
+    public static void resetSettings() {
+        _settings = new Settings();
     }
 
     private static boolean getChance(float chance) {
@@ -24,7 +34,7 @@ public class Uwuifier {
 
     private static final Pattern escapePattern = Pattern.compile("(?=[~_<>])");
     private static String escapeString(String string) {
-        return escapePattern.matcher(string).replaceAll("\\");
+        return escapePattern.matcher(string).replaceAll("\\\\");
     }
 
     private static boolean isCaps(String string) {
@@ -124,16 +134,12 @@ public class Uwuifier {
         new SuffixChoice(">w<"),
         new SuffixChoice(":3"),
         new SuffixChoice(new SuffixChoice[] {
-            new SuffixChoice(new SuffixChoice[] {
-                new SuffixChoice("nya"),
-                new SuffixChoice("nya~"),
-                new SuffixChoice("nya~~")
-            }),
-            new SuffixChoice(new SuffixChoice[] {
-                new SuffixChoice("nyaa"),
-                new SuffixChoice("nyaa~"),
-                new SuffixChoice("nyaa~~")
-            })
+            new SuffixChoice("nya"),
+            new SuffixChoice("nya~"),
+            new SuffixChoice("nya~~"),
+            new SuffixChoice("nyaa"),
+            new SuffixChoice("nyaa~"),
+            new SuffixChoice("nyaa~~")
         }),
         new SuffixChoice(new SuffixChoice[] {
             new SuffixChoice(">_<"),
@@ -179,17 +185,17 @@ public class Uwuifier {
         new Replacement(Pattern.compile("\\.(?= |$)"), (escape, isIgnoredAt) ->
             (match, offset, string) -> {
                 if(isIgnoredAt.invoke(offset, string)) return match;
-                if(!getChance(Settings.periodToExclamationChance))
+                if(!getChance(_settings.periodToExclamationChance))
                     return match;
                 return "!";
             }),
-        // duplicate commas
-        new Replacement(Pattern.compile(","), (escape, isIgnoredAt) ->
+        // duplicate characters
+        new Replacement(Pattern.compile("[,!]"), (escape, isIgnoredAt) ->
             (match, offset, string) -> {
                 if(isIgnoredAt.invoke(offset, string)) return match;
-                if(getChance(Settings.duplicateCommasChance)) {
+                if(getChance(_settings.duplicateCharactersChance)) {
                     int amount =
-                        (int)Math.floor((Math.random() + 1) * (Settings.duplicateCommasAmount - 1));
+                        (int)Math.floor((Math.random() + 1) * (_settings.duplicateCharactersAmount - 1));
 
                     StringBuilder matchBuilder = new StringBuilder(match);
                     for(int i = 0; i < amount; i++)
@@ -229,7 +235,7 @@ public class Uwuifier {
         new Replacement(Pattern.compile("(?<= |^)[a-zA-Z]"), (escape, isIgnoredAt) ->
             (match, offset, string) -> {
                 if(isIgnoredAt.invoke(offset, string)) return match;
-                if(!getChance(Settings.stutterChance))
+                if(!getChance(_settings.stutterChance))
                     return match;
                 return String.format("%s-%s", match, match);
             }),
@@ -239,9 +245,9 @@ public class Uwuifier {
                 if(isIgnoredAt.invoke(offset, string)) return match;
                 String presuffix = "";
                 String suffix = "";
-                if(getChance(Settings.presuffixChance))
+                if(getChance(_settings.presuffixChance))
                     presuffix = presuffixes.choose();
-                if(getChance(Settings.suffixChance))
+                if(getChance(_settings.suffixChance))
                     suffix = suffixes.choose();
                 String finalSuffix = String.format("%s %s", presuffix, suffix);
                 if(escape) finalSuffix = escapeString(finalSuffix);

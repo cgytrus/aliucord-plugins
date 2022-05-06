@@ -1,4 +1,4 @@
-version = "1.0.0"
-description = "an aliucord plugin that makes your messages very uwu"
+version = "1.0.1"
+description = "makes your messages very uwu"
 
 aliucord { }
